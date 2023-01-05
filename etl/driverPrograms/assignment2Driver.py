@@ -1,4 +1,4 @@
-from utilPrograms.assignment2Util import *
+from etl.utilPrograms.assignment2Util import *
 print(totalLinesRdd(loadDataToRDD))
 print(totalWarnRdd(loadDataToRDD))
 print(totalRepoProcessed(loadDataToRDD))
