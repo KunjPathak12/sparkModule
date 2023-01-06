@@ -26,8 +26,8 @@ dfunique=dfJoin.dropDuplicates(["location"])
 n = dfunique.count()
 print("Answer 1\nThe count of unique locations where each product is sold is: {}\n".format(n))
 # Answer2
-m = dfJoin.groupBy("userid","pdesc").count().sort("userid").show()
-print("Answer 2\nThe products bought by each user are as follows: {}\n".format(m))
+print("Answer 2\nThe products bought by each user are as follows:\n")
+dfJoin.groupBy("userid","pdesc").count().sort("userid").show()
 # Answer3
 print("Answer 3a\nThe spending done by each user on each product:\n")
 dfJoin.groupBy("userid","pdesc").sum("price").sort("userid").show()
