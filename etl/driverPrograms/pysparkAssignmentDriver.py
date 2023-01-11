@@ -1,0 +1,8 @@
+from etl.utilPrograms.pysparkAssignmentUtil import *
+convertDate(createDataframeTable1,convertMiliSecondsToTimeStamp)
+converttoDateType(convertDate,timeStampToDateType)
+rmWhiteSpaces(createDataframeTable1,rmWhiteSpaceUtils)
+changeNUllValues(createDataframeTable1)
+convertCase(convertCaseUtils,createDataframeTable2)
+convertTimeStampToMiliSeconds(createDataframeTable2,convertSecondstoTimeStamp)
+combineTheTables(createDataframeTable1,createDataframeTable2)

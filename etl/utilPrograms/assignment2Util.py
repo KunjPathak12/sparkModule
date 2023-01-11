@@ -11,7 +11,8 @@ schema = StructType([StructField("Logging Level",StringType(),True),\
                      StructField("downloader_id",StringType(),True)])
 spark.sparkContext.setLogLevel("ERROR")
 
-filePath = "/home/kp03/sparkModule2/datasets/ghtorrent-logs.txt"
+filePath = input("input a proper absolute reference to a csv file:\n ")
+
 
 def loadDataToRDD(filePath):
   myRdd = spark.sparkContext.textFile(filePath)
