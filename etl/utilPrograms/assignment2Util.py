@@ -11,8 +11,8 @@ schema = StructType([StructField("Logging Level",StringType(),True),\
                      StructField("downloader_id",StringType(),True)])
 spark.sparkContext.setLogLevel("ERROR")
 
-# filePath = input("input a proper absolute reference to a csv file:\n ")
-filePath = "/home/kp03/sparkModule2/datasets/ghtorrent-logs.txt"
+filePath = input("input a proper absolute reference to a csv file:\n ")
+# filePath = "/home/kp03/sparkModule2/datasets/ghtorrent-logs.txt"
 
 
 def loadDataToRDD(filePath):
@@ -58,9 +58,8 @@ def mostHttp(articulatedDf):
         .drop("sr_no")
     print("Ans5: Max http requests done by user is mentioned below with details: " )
     ans.show()
-    # print(ans.schema)
     return ans
-# mostHttp(articulatedDf)
+
 def failedRequest(articulatedDf):
     finaldf = articulatedDf(makeDf)
     dfFailed = finaldf.filter(finaldf.jobInfo.contains("Failed")).groupBy("id").count().orderBy(col("count").desc())

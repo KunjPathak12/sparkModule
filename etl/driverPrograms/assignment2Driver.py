@@ -6,5 +6,3 @@ mostHttp(articulatedDf)
 failedRequest(articulatedDf)
 activeHourOfTheDay(articulatedDf)
 mostActiveRepo(articulatedDf)
-
-# filePath = /home/kp03/sparkModule2/datasets/ghtorrent-logs.txt

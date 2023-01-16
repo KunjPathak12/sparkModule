@@ -38,7 +38,9 @@ def productByEachUser(joinColumn):
     dfJoin = dfJoin.withColumnRenamed("location ", "location")
     dfJoin = dfJoin.withColumnRenamed("product_description", "pdesc")
     print("Answer 2\nThe products bought by each user are as follows:\n")
-    return (dfJoin.groupBy("userid", "pdesc").count().sort("userid").show())
+    dfJoin = dfJoin.groupBy("userid", "pdesc").count().sort("userid")
+    dfJoin.show()
+    return dfJoin
 
 def spendingByUSer(joinColumn):
     # Answer3
@@ -46,7 +48,9 @@ def spendingByUSer(joinColumn):
     dfJoin = dfJoin.withColumnRenamed("location ", "location")
     dfJoin = dfJoin.withColumnRenamed("product_description", "pdesc")
     print("Answer 3a\nThe spending done by each user on each product:\n")
-    return (dfJoin.groupBy("userid","pdesc").sum("price").sort("userid").show())
+    dfJoin = dfJoin.groupBy("userid","pdesc").sum("price").sort("userid")
+    dfJoin.show()
+    return dfJoin
 
 def totalSpendingByUser(joinColumn):
     # Total Spending
@@ -54,4 +58,6 @@ def totalSpendingByUser(joinColumn):
     dfJoin = dfJoin.withColumnRenamed("location ", "location")
     dfJoin = dfJoin.withColumnRenamed("product_description", "pdesc")
     print("Answer 3b\nTotal spending done by each user:\n")
-    return (dfJoin.groupBy("userid").sum("price").sort("userid").alias("totalSpent").show())
+    dfJoin = dfJoin.groupBy("userid").sum("price").sort("userid").alias("totalSpent")
+    dfJoin.show()
+    return dfJoin
