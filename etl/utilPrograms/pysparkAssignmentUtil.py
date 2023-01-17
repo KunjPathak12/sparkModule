@@ -30,6 +30,7 @@ Schema1 = StructType([StructField("SourceId",LongType(),True),\
 Data1 = [(150711,123456,"EN",456789,"2021-12-27T08:20:29.842+0000","0001"),\
         (150439,234567,"UK",345678,"2021-12-27T08:21:14.645+0000","0002"),\
         (150647,345678,"ES",234567,"2021-12-27T08:22:42.445+0000","0003")]
+
 spark.sparkContext.setLogLevel("ERROR")
 def createDataframeTable1(Data,Schema):
     df = spark.createDataFrame(data=Data, schema=Schema)
@@ -44,7 +45,7 @@ def convertDate(createDataframeTable1,convertMiliSecondsToTimeStamp):
     df = createDataframeTable1(Data,Schema)
     df = df.rdd.map(lambda x:(x[0],x[1],convertMiliSecondsToTimeStamp(x[1]),x[2],x[3],x[4],x[5])).\
         toDF(schema = ["ProductName","IssueDate","newTimeStamp","Price","Brand","Country","ProductNumber"])
-    df.show()
+    df.show(truncate = False)
     return df
 
 # Q1B Convert to date type
@@ -54,6 +55,9 @@ def converttoDateType(convertDate,timeStampToDateType):
     df = df.rdd.map(lambda x:(x[0],x[1],timeStampToDateType(x[2]),x[3],x[4],x[5],x[6])).\
         toDF(schema = ["ProductName","IssueDate","DateType","Price","Brand","Country","ProductNumber"])
     df.show()
+    return df
+
+
 
 # Q1C
 def rmWhiteSpaces(createDataframeTable1,rmWhiteSpaceUtils):
@@ -61,12 +65,14 @@ def rmWhiteSpaces(createDataframeTable1,rmWhiteSpaceUtils):
     df = df.rdd.map(lambda x:(x[0],x[1],x[2],rmWhiteSpaceUtils(x[3]),x[4],x[5])).\
         toDF(schema = ["ProductName","IssueDate","Price","Brand","Country","ProductNumber"])
     df.show()
+    return df
 
 # Q1D replace null values with Empty Values
 def changeNUllValues(createDataframeTable1):
     df = createDataframeTable1(Data,Schema)
     df = df.select("*",when(df.Country == "","Empty Value").otherwise(df.Country).alias("nullHandlingForCountry")).drop("Country")
     df.show()
+    return df
 
 # Q2A Change the camel case columns to snake case
 def convertCase(convertCaseUtils,createDataframeTable2):
@@ -75,6 +81,7 @@ def convertCase(convertCaseUtils,createDataframeTable2):
     updatedSchema = list(map(convertCaseUtils,columns))
     df = df.rdd.toDF(updatedSchema)
     df.show()
+    return df
 
 # Q2B Add another column as start_time_ms and convert the values of StartTime to
 # milliseconds.
@@ -82,19 +89,23 @@ def convertTimeStampToMiliSeconds(createDataframeTable2,convertSecondstoTimeStam
 
     df = createDataframeTable2(Data1,Schema1)
     dfNew = df.rdd.map(lambda x: (x[0],x[1],x[2],x[3],x[4],convertSecondstoTimeStamp(x[4]),x[5])).\
-        toDF(schema=["SourceID","TransactionNumber","Language","ModelNumber","unchangedTime","changedTime","ProductNumber",])
+        toDF(schema=["SourceID","TransactionNumber","Language","ModelNumber","unchangedTime","changedTime", "ProductNumber",])
     dfNew = dfNew.withColumn("changedTime",col("changedTime").cast("long"))
-    dfNew.show()
-
+    dfNew.show(truncate = False)
+    return dfNew
+convertTimeStampToMiliSeconds(createDataframeTable2,convertSecondstoTimeStamp)
 # Q3 Combine both the tables based on the Product Number and get all the fields in return.
 # And get the country as EN
 def combineTheTables(createDataframeTable1, createDataframeTable2):
     df1 = createDataframeTable1(Data,Schema)
     df2 = createDataframeTable2(Data1,Schema1)
     dfJoin = df1.join(df2,df1.ProductNumber == df2.ProductNumber,"inner")
-    dfJoin.show()
+    dfJoin.show(truncate = False)
+    return dfJoin
+
+def getCountrybyValue(combineTheTables):
+    dfJoin =  combineTheTables(createDataframeTable1, createDataframeTable2)
     dfJoin = dfJoin.filter(dfJoin.Language.contains("EN")).groupBy("Country","Language").count()\
         .select("Country","Language", col("count").alias("countryFound"))
     dfJoin.show()
-
-# combineTheTables(createDataframeTable1, createDataframeTable2)
+    return dfJoin
